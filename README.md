@@ -86,8 +86,10 @@ No tool name lives in this repo. Each consuming project adds one **slim** exposu
 per tool, redirecting to the kernel — nothing important depends on any tool:
 
 ```
-Read all rules under .agents/kernel/rules/ before acting.
+Read all rules under .agents/kernel/rules/always/ before acting. Load a role from .agents/kernel/rules/roles/ only when assigned that role.
 ```
+
+This exposure file covers two loading paths. It points the tool at rules/always/ (loaded in full, at all times — background invariants are outside the skill format) and at rules/roles/ (from which the tool loads skills via the Agent Skills progressive disclosure — name+description at rest, full SKILL.md on activation). The file only declares where to look; it does not reimplement the loading itself.
 
 Put that line in `CLAUDE.md`, `.cursor/rules`, or whatever your agent reads. Leaving a
 tool means deleting a three-line file. Rules are kept as plain `.md` (no proprietary
