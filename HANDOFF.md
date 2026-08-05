@@ -48,6 +48,42 @@ Construire son environnement agentique versionné. Architecture décidée : **2 
    centimes vs euros, null vs objet vide, qui fait l'auth) = À FAIRE AVANT LE MERGE.
    N'existe pas sur les features mono-lot.
 
+## Rôles : permissions déclaratives (moindre privilège)
+
+Chaque fichier de `rules/roles/` déclare en tête les permissions du rôle sur des
+RESSOURCES GÉNÉRIQUES (jamais des fichiers nommés — le kernel reste invariant).
+Un rôle ne déborde pas parce qu'une capacité absente ne peut pas déborder : on câble
+l'isolation, on ne la demande pas.
+
+Ressources génériques : code source, tests, contrat de feature, specs, journal, PR/diff.
+
+Trois niveaux d'accès :
+- R      — lit la ressource.
+- W      — écrit / modifie la ressource.
+- PROPOSE — émet une recommandation sur la ressource sans l'appliquer (ni R ni W).
+  Ex : le reviewer signale un écart au contrat ; un AUTRE rôle appliquera la correction.
+
+Interdit par défaut, sauf rôle unique et explicite : W sur specs / contrat.
+Un agent qui réécrit la spec pour faire passer son code inverse la hiérarchie normative
+(le narratif réécrit le normatif). C'est la faille qui contourne tout le reste. Verrouiller.
+
+Patron de tête de fichier de rôle :
+```
+  # <role name>
+  PRODUCES:     <la sortie unique du rôle>
+  NEVER PRODUCES: <la borne négative explicite>
+  PERMISSIONS:
+    source code      : R | W | PROPOSE | none
+    tests            : R | W | PROPOSE | none
+    feature contract : R | W | PROPOSE | none
+    specs            : R | W | PROPOSE | none   # W interdit sauf rôle dédié
+    journal          : R | W | PROPOSE | none
+    PR / diff        : R | W | PROPOSE | none
+```
+
+Une permission déclarée est VÉRIFIABLE : une sortie hors permissions se voit sans juger
+le fond. Cohérent avec la méta-règle (une contrainte vaut si elle est vérifiable).
+
 ## La règle d'or (contre la paralysie)
 
 **On n'extrait que ce qui a DÉJÀ été répété. Rien de spéculatif.**
