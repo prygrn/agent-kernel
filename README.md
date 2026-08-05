@@ -63,3 +63,11 @@ README.md
 
 Rules are added by sedimentation, not anticipation: a rule enters the kernel only
 after it has proven itself on shipped code and shown it holds across projects.
+
+## Agent Agnosticity
+
+Cursor rules, CLAUDE.md and other tool-specifi rules are not carried through this repo.
+To do so, create a slim file regarding to your agent and write the simple following sentence:
+```
+Read all rules under .agents/kernel/rules/ before acting.
+```
