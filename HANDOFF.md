@@ -130,6 +130,8 @@ Le jour où on quitte un outil, on supprime un fichier de 3 lignes. Décision ac
 règles en `.md` pur (pas de frontmatter propriétaire type .mdc). Pour les skills, viser le
 cœur portable du standard, éviter les extensions propres à un outil.
 
+Le fichier d'exposition couvre DEUX chemins : always/ (chargé en entier, toujours — hors format skill) et roles/ (skills chargés en divulgation progressive par l'outil). Il déclare seulement OÙ regarder, il ne réimplémente pas le chargement.
+
 ## Architecture du repo (cible)
 
 ```
