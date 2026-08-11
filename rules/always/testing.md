@@ -33,3 +33,4 @@ Avoid brittle assertions such as matching exact error message text.
 Test all business logic — any function whose behavior can regress without the compiler catching it.
 Test pure functions without any setup.
 When the full test suite is too slow to run, run only the tests scoped to the feature.
+Write tests for new code.
