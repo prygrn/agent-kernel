@@ -1,7 +1,26 @@
 # agent-kernel
 
-Invariant, cross-project rules and roles for AI coding agents.
-Consumed as a git submodule; project-specific rules live in `agent-modules`.
+**A versioned, tool-agnostic rule system for AI coding agents — built to stop agent output from drifting as a project grows.**
+
+Invariant, cross-project rules and roles that every project inherits as a git submodule.
+Project-specific rules live in a separate `agent-modules` catalogue.
+
+---
+
+## Why this exists
+
+Working with coding agents, one problem shows up on every project: **the further you get, the harder it is to keep agents coherent.** Context fills with history, stale decisions, and noise; quality that was sharp at feature 1 quietly erodes by feature 8. The agent didn't get worse — its context got polluted.
+
+This repo try to be the answer to that decay. It treats agent guidance as a system with a single source of truth, loaded selectively, versioned, and improved in one place so every project benefits at once. The design goal throughout is **low drift**: keep the intent stable, keep the context clean, and make each agent load only what its task needs.
+
+The principles it's built on:
+
+- **Context entropy is the real enemy.** Agents don't tire; their context degrades. Everything here fights that.
+- **Normative memory outranks narrative memory.** Specs and rules ("what must be") win over logs ("what happened"). When they conflict, the spec wins and the code is the bug.
+- **Least privilege for agents.** A role can't overflow into work it has no capability for. Isolation is wired, not politely requested.
+- **Sedimentation, not anticipation.** A rule enters only after it has proven itself on shipped code across projects — never speculatively.
+
+---
 
 ## What this is
 
@@ -22,7 +41,7 @@ The kernel holds two natures of file, loaded differently:
 
 - **Roles (`rules/roles/`)** — encapsulated know-how (reviewer, QA, implementer). **One**
   is loaded at a time, activated by the role assigned to the agent. These follow the
-  **Agent Skills** open format (https://agentskills.io): a folder with a `SKILL.md`.
+  **Agent Skills** open format (<https://agentskills.io>): a folder with a `SKILL.md`.
   Progressive disclosure means only name+description sit in context until a task matches,
   keeping the footprint small.
 
@@ -109,12 +128,12 @@ Otherwise, true for all projects? → kernel. Otherwise → module.
 
 ## Relationship to agent-modules
 
-| | agent-kernel | agent-modules |
-|---|---|---|
-| Scope | invariant, all projects | opt-in per project |
-| Content | rules, roles/skills, cross-cutting conventions | language / platform / art-direction |
-| Consumed as | git submodule | copy-paste |
-| Changes | propagate to all projects | isolated per project |
+|             | agent-kernel                                   | agent-modules                       |
+| ----------- | ---------------------------------------------- | ----------------------------------- |
+| Scope       | invariant, all projects                        | opt-in per project                  |
+| Content     | rules, roles/skills, cross-cutting conventions | language / platform / art-direction |
+| Consumed as | git submodule                                  | copy-paste                          |
+| Changes     | propagate to all projects                      | isolated per project                |
 
 ## Principle
 
