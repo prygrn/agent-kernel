@@ -11,3 +11,7 @@ When sources of truth conflict, ask the user to decide.
 Profile code to identify performance bottlenecks before optimizing.
 Use a debugger to step through code and inspect variables when diagnosing a bug.
 Include enough context in error messages to debug from them
+Read, in this strict order, rules, the product spec and the journal before acting.
+Flag any undecided product or architecture question instead of deciding it.
+Log every non-trivial decision in the journal
+Verify external contracts against their real source, not from memory

@@ -30,6 +30,7 @@ moindre privilège. Utilise ces analogies, elles portent.
 ## Ce qu'on construit
 
 Un environnement agentique versionné. Architecture décidée : **2 repos**.
+
 - `agent-kernel` (CE repo) — INVARIANTS, vrais pour tous les projets et toutes les stacks.
   Consommé en **submodule** → une amélioration profite à tous au prochain pull.
 - `agent-modules` (séparé) — catalogue opt-in : langage / plateforme / direction artistique.
@@ -81,8 +82,9 @@ Un rôle ne déborde pas parce qu'une capacité absente ne peut pas déborder : 
 l'isolation, on ne la demande pas.
 
 Trois niveaux d'accès (R/W ne suffit pas) :
-- R       — lit la ressource.
-- W       — écrit / modifie la ressource.
+
+- R — lit la ressource.
+- W — écrit / modifie la ressource.
 - PROPOSE — émet une recommandation sans l'appliquer (ni R ni W). Ex : le reviewer signale
   un écart ; un AUTRE rôle appliquera la correction.
 
@@ -91,6 +93,7 @@ Un agent qui réécrit la spec pour faire passer son code inverse la hiérarchie
 (le narratif réécrit le normatif). Faille qui contourne tout le reste. Verrouiller.
 
 Patron de tête de SKILL.md de rôle :
+
 ```
   PRODUCES:       <la sortie unique du rôle>
   NEVER PRODUCES: <la borne négative explicite>
@@ -103,6 +106,7 @@ Patron de tête de SKILL.md de rôle :
     journal          : R | W | PROPOSE | none
     PR / diff        : R | W | PROPOSE | none
 ```
+
 Une permission déclarée est VÉRIFIABLE : une sortie hors permissions se voit sans juger
 le fond. Cohérent avec la méta-règle (une contrainte vaut si elle est vérifiable).
 
@@ -117,6 +121,7 @@ le fond. Cohérent avec la méta-règle (une contrainte vaut si elle est vérifi
   Un skill qui a besoin d'un MCP le DÉCLARE en dépendance ; le projet le fournit.
 
 Test de rangement (dans l'ordre) :
+
 1. Contient un secret / une connexion à un service ? → config projet, hors git.
 2. Sinon, vrai pour tous mes projets ? → kernel.
 3. Sinon → module.
@@ -125,7 +130,7 @@ Test de rangement (dans l'ordre) :
 
 La vérité est dans du Markdown neutre sous `rules/`. Aucun nom d'outil dans le kernel.
 Chaque projet consommateur pose un fichier d'exposition MINCE (CLAUDE.md, .cursor/rules…)
-qui ne fait que rediriger : "Read all rules under .agents/kernel/rules/ before acting."
+qui ne fait que rediriger : "Read all rules under .agents/rules/ before acting."
 Le jour où on quitte un outil, on supprime un fichier de 3 lignes. Décision actée :
 règles en `.md` pur (pas de frontmatter propriétaire type .mdc). Pour les skills, viser le
 cœur portable du standard, éviter les extensions propres à un outil.
@@ -153,6 +158,7 @@ agent-kernel/
       implementer/
         SKILL.md
 ```
+
 Note : `always/` et `roles/` sont de NATURES différentes (voir la distinction centrale).
 Les fichiers restent courts, à responsabilité unique → chargement sélectif, moins de bruit.
 
@@ -174,6 +180,7 @@ a le critère pour dire : ambiguë / c'est deux règles / pas vérifiable.
 ## État d'avancement
 
 FAIT (décidé) :
+
 - Architecture 2 repos + noms + submodule vs copier-coller.
 - Langue des règles : anglais. Style : phrases atomiques, pas caveman. Fichiers en .md pur.
 - Distinction always (règles, toujours chargées) vs roles (skills, activés à la demande).
@@ -184,6 +191,7 @@ FAIT (décidé) :
   KEEP/REWRITE/SPLIT/MODULE/DROP, flag les contradictions). Prêt à l'emploi.
 
 À FAIRE — tâche de CETTE semaine, une seule :
+
 1. Créer le repo kernel + l'arborescence rules/always + rules/roles (fait ou en cours).
 2. Écrire always/meta.md (la méta-règle — seul contenu VRAIMENT neuf).
 3. Importer les règles communes éparpillées dans les anciens projets, TOUTES passées au
@@ -192,6 +200,7 @@ FAIT (décidé) :
    règle importée dans always/ (invariant de fond) ou en candidate rôle/skill.
 
 EN SOMMEIL (ne pas construire tant que non déclenché par une 2e répétition) :
+
 - Conversion effective des rôles en skills Agent Skills (viendra quand les rôles seront
   stabilisés — pour l'instant on pose juste la structure roles/).
 - Skill d'orchestration du workflow, catalogue complet de modules, skill UI/UX maison,

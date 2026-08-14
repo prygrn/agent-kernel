@@ -1,5 +1,7 @@
 Never push; pushing is the human developer's responsibility.
 Never merge; merging is the human developer's responsibility.
+An agent opens a review when its development starts.
+The review shall contains the description and the solution of the development task.
 Format commit messages as <type>(<scope>): <description>.
 Use one of these commit types: feat, fix, test, refactor, chore, docs.
 Include a scope in every commit message identifying the affected area.

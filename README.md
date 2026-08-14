@@ -39,11 +39,11 @@ The kernel holds two natures of file, loaded differently:
   conventions). Loaded by **every** agent, **at all times**, regardless of the task.
   These are NOT skills: an invariant is not conditional. Plain neutral Markdown.
 
-- **Roles (`rules/roles/`)** — encapsulated know-how (reviewer, QA, implementer). **One**
+- **Roles (`skills/`)** — encapsulated know-how (reviewer, QA, implementer, integrator). **One**
   is loaded at a time, activated by the role assigned to the agent. These follow the
-  **Agent Skills** open format (<https://agentskills.io>): a folder with a `SKILL.md`.
-  Progressive disclosure means only name+description sit in context until a task matches,
-  keeping the footprint small.
+  **Agent Skills** open format (<https://agentskills.io>): a folder with a `SKILL.md`,
+  at the repo root as the spec requires. Progressive disclosure means only name+description
+  sit in context until a task matches, keeping the footprint small.
 
 A role declares its dependency on the `always/` rules it needs — it never duplicates them.
 
@@ -77,10 +77,13 @@ agent-kernel/
       methodology.md    # feature contract, review vs contract, semantic integration,
                         #   normative hierarchy, "write-specs forbidden by default"
       conventions.md    # cross-cutting conventions (money in cents, null handling, auth…)
-    roles/              # skills (Agent Skills format) — one loaded at a time, on demand
-      reviewer/SKILL.md
-      qa/SKILL.md
-      implementer/SKILL.md
+      naming.md
+      testing.md
+  skills/               # skills (Agent Skills format) — one loaded at a time, on demand
+    reviewer/SKILL.md
+    qa/SKILL.md
+    implementer/SKILL.md
+    integrator/SKILL.md
 ```
 
 ## Using it in a project
@@ -88,14 +91,14 @@ agent-kernel/
 Add the kernel as a submodule:
 
 ```bash
-git submodule add <kernel-repo-url> .agents/kernel
+git submodule add <kernel-repo-url> .agents
 git commit -m "add agent-kernel submodule"
 ```
 
 Pull the latest kernel improvements into a project:
 
 ```bash
-git submodule update --remote .agents/kernel
+git submodule update --remote .agents
 git commit -m "update agent-kernel"
 ```
 
@@ -105,10 +108,10 @@ No tool name lives in this repo. Each consuming project adds one **slim** exposu
 per tool, redirecting to the kernel — nothing important depends on any tool:
 
 ```
-Read all rules under .agents/kernel/rules/always/ before acting. Load a role from .agents/kernel/rules/roles/ only when assigned that role.
+Read all rules under .agents/rules/always/ before acting. Load a role from .agents/skills/ only when assigned that role.
 ```
 
-This exposure file covers two loading paths. It points the tool at rules/always/ (loaded in full, at all times — background invariants are outside the skill format) and at rules/roles/ (from which the tool loads skills via the Agent Skills progressive disclosure — name+description at rest, full SKILL.md on activation). The file only declares where to look; it does not reimplement the loading itself.
+This exposure file covers two loading paths. It points the tool at rules/always/ (loaded in full, at all times — background invariants are outside the skill format) and at skills/ (from which the tool loads skills via the Agent Skills progressive disclosure — name+description at rest, full SKILL.md on activation). The file only declares where to look; it does not reimplement the loading itself.
 
 Put that line in `CLAUDE.md`, `.cursor/rules`, or whatever your agent reads. Leaving a
 tool means deleting a three-line file. Rules are kept as plain `.md` (no proprietary
