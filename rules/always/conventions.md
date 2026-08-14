@@ -25,3 +25,4 @@ Write comments and documentation in French.
 Communicate with the user exclusively in French.
 Keep code, identifiers, and technical terms in their original form.
 Type every variable when the language supports it.
+Include enough context in error messages to debug from them.
