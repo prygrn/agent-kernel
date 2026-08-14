@@ -12,7 +12,6 @@ Define custom error types for domain-specific failures.
 Write log messages in English.
 Attach an error code to every logged error.
 Give each file one responsibility.
-Protect state-changing requests with anti-CSRF tokens.
 Whitelist which fields may be set from user input; never mass-assign unfiltered parameters.
 Trim leading and trailing whitespace from user input before validating or storing it.
 Do not optimize code before it is proven to need optimization.
