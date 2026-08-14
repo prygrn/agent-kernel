@@ -21,8 +21,8 @@ PERMISSIONS:
   tests            : R
   feature contract : R
   specs            : R
-  journal          : W        # logs the review outcome per always/methodology.md
-  PR / diff        : R, PROPOSE
+  journal          : none
+  review           : W
 ```
 
 ## Two modes
