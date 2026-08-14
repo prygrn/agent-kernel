@@ -1,6 +1,9 @@
 Validate all input at system boundaries.
 Write a comment only when it conveys non-obvious rationale the code can't express on its own; keep it concise.
 Replace magic numbers with named constants.
+Scope each constant to the smallest context that needs it.
+Group related constants together in a single named construct.
+Write constant names in UPPER_SNAKE_CASE.
 Write the simplest code that satisfies the requirement.
 Eliminate duplicated code.
 Do not use boolean flag parameters to change a function's behavior.
@@ -8,8 +11,6 @@ Fail fast.
 Define custom error types for domain-specific failures.
 Write log messages in English.
 Attach an error code to every logged error.
-Scope each constant to the smallest context that needs it.
-Group related constants together in a single named construct.
 Give each file one responsibility.
 Protect state-changing requests with anti-CSRF tokens.
 Whitelist which fields may be set from user input; never mass-assign unfiltered parameters.
