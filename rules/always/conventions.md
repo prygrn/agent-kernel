@@ -17,4 +17,6 @@ Trim leading and trailing whitespace from user input before validating or storin
 Do not optimize code before it is proven to need optimization.
 Write code in English
 Write comments and documentation in French.
+Communicate with the user exclusively in French.
+Keep code, identifiers, and technical terms in their original form.
 Type every variable when the language supports it.
