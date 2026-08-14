@@ -1,13 +1,18 @@
 Validate all input at system boundaries.
 Write a comment only when it conveys non-obvious rationale the code can't express on its own; keep it concise.
+Name classes, interfaces, and types in PascalCase.
+Name variables, functions, and methods in camelCase.
+Name files and folders in kebab-case.
+Write constant names in UPPER_SNAKE_CASE.
+Name environment variables in UPPER_SNAKE_CASE.
+Allow only these abbreviations: API, URL, JWT, SSE, i/j for loop indices, err for error, and ctx for context.
 Replace magic numbers with named constants.
 Scope each constant to the smallest context that needs it.
 Group related constants together in a single named construct.
-Write constant names in UPPER_SNAKE_CASE.
-Write the simplest code that satisfies the requirement.
-Eliminate duplicated code.
-Do not use boolean flag parameters to change a function's behavior.
 Fail fast.
+Eliminate duplicated code.
+Write the simplest code that satisfies the requirement.
+Do not use boolean flag parameters to change a function's behavior.
 Define custom error types for domain-specific failures.
 Write log messages in English.
 Attach an error code to every logged error.
