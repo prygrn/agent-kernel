@@ -8,3 +8,6 @@ When uncertain how a rule applies, stop and ask before proceeding.
 Rank sources of truth in this order: product specs, technical specs, mockups, documents, code.
 Do not modify a higher-ranked source of truth to accommodate a lower-ranked one.
 When sources of truth conflict, ask the user to decide.
+Profile code to identify performance bottlenecks before optimizing.
+Use a debugger to step through code and inspect variables when diagnosing a bug.
+Include enough context in error messages to debug from them

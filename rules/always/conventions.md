@@ -25,4 +25,8 @@ Write comments and documentation in French.
 Communicate with the user exclusively in French.
 Keep code, identifiers, and technical terms in their original form.
 Type every variable when the language supports it.
-Include enough context in error messages to debug from them.
+Choose algorithms and data structures appropriate to the performance requirements of the code.
+Reuse objects via pooling in performance-critical code instead of repeatedly allocating new ones.
+Minimize object allocation in performance-critical code paths.
+Store environment variables in .env files.
+Extract complex logic into separate modules.
