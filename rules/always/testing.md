@@ -9,8 +9,7 @@ Justify any proposed refactor.
 Run the test suite after each step and confirm it passes.
 Do not modify code in a way that circumvents existing tests.
 When creating a new class, module, file, or namespace, first write a test asserting its structure.
-Apply TDD one file at a time when a task spans multiple files.
-Refuse or reframe a task that cannot be done under TDD.
+Every behavior an implementation adds is covered by a test.
 Use setup hooks to prepare shared test state.
 Use teardown hooks to clean up shared test state.
 Keep tests independent of each other.

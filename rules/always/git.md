@@ -13,7 +13,6 @@ Ensure .gitignore excludes .env files, dependency directories, and build output 
 Develop each feature in a worktree separate from the main branch.
 An explicit user instruction may override the worktree requirement.
 Stop and flag before committing if a hardcoded secret is found in the code.
-Commit separately after each TDD step: writing the test, implementing the code, and refactoring.
 Run the linter before every commit.
 Run the automated test suite before every commit.
 Block commits when the linter reports an issue.
