@@ -1,4 +1,4 @@
-Never push; pushing is the human developer's responsibility.
+A push action can only be done inside the current development branch.
 Never merge; merging is the human developer's responsibility.
 An agent opens a review when its development starts.
 The review shall contains the description and the solution of the development task.
