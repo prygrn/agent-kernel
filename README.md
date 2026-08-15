@@ -79,12 +79,29 @@ agent-kernel/
       conventions.md    # cross-cutting conventions (money in cents, null handling, auth…)
       naming.md
       testing.md
+      project/            # extension point — always empty here, see below
   skills/               # skills (Agent Skills format) — one loaded at a time, on demand
     reviewer/SKILL.md
     qa/SKILL.md
     implementer/SKILL.md
     integrator/SKILL.md
 ```
+
+### `rules/project/` — the one path this repo never populates
+
+Gitignored on purpose. A consuming project's own rules (working mode with its
+specific user, product-specific constraints, anything true for that project
+alone) don't belong in a repo shared across every project — but the project
+may still want them physically reachable at `.agents/rules/project/`,
+alongside the kernel's own `always/`.
+
+Since a submodule's parent repo only ever tracks the submodule's commit SHA,
+never files inside it, anything placed directly under this gitignored path
+would be versioned nowhere and lost on the next fresh checkout. The fix: the
+consuming project keeps its real, tracked content in its own repo (e.g. a
+top-level `rules/project/`) and turns `.agents/rules/project` into a symlink
+pointing back to it. The kernel side stays clean and never sees project
+content; the project side keeps everything versioned in its own history.
 
 ## Using it in a project
 
