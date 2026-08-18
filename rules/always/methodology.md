@@ -13,5 +13,6 @@ Use a debugger to step through code and inspect variables when diagnosing a bug.
 Include enough context in error messages to debug from them
 Read, in this strict order, rules, the product spec and the journal before acting.
 Flag any undecided product or architecture question instead of deciding it.
-Log every non-trivial decision in the journal
-Verify external contracts against their real source, not from memory
+Log every non-trivial decision in the journal.
+Verify external contracts against their real source, not from memory.
+Product decisions and implementation happen in separate sessions.
