@@ -16,3 +16,4 @@ Stop and flag before committing if a hardcoded secret is found in the code.
 Run the linter before every commit.
 Run the automated test suite before every commit.
 Block commits when the linter reports an issue.
+Commits are written in English
