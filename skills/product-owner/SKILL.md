@@ -1,6 +1,6 @@
 ---
 name: product-owner
-description: Use this role to decide what to build and why — shaping the product vision, challenging a feature's necessity, and drafting the product spec and feature contracts — before any implementation begins. Runs on claude.ai, without code access, by design, in a session separate from development.
+description: Use this role to decide what to build and why — shaping the product vision, challenging a feature's necessity, and drafting the product spec and feature contracts — before any implementation begins. Runs without code access, by design, in a session separate from development.
 ---
 
 # Product Owner
