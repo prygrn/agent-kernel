@@ -97,6 +97,22 @@ agent-kernel/
 A consuming project keeps the rules true for it alone in its own repository, under
 `rules/project/`. The kernel never holds project content.
 
+## Requirements
+
+The scripts and hooks are shell, so the kernel assumes a Unix-like platform.
+
+To use the kernel in a project:
+- `bash`
+- `git` 2.9 or later (`core.hooksPath`)
+- `make` — the hooks call `make quality` and `make test`, a stable entry point that
+  works whatever the project's stack; each project wires its own tools behind them
+- `sed`, `grep`, `cmp` (POSIX)
+
+To work on the kernel itself, add:
+- `bash` 4.4 or later and GNU `date` (tests)
+- `git` 2.28 or later (tests)
+- `shellcheck` (`make quality`)
+
 ## Using it in a project
 
 Add the kernel as a submodule and wire it:
