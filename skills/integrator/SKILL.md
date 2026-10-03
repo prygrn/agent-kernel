@@ -11,10 +11,9 @@ PRODUCES:       a semantically-consistent integration — either parallel work r
                  repository updated to reflect a source repository's decisions
 NEVER PRODUCES: feature contract changes, spec changes, new feature behavior beyond what
                  the lots already implement, any write into a read-only source repository
-DEPENDS ON:     rules/always/methodology.md (full or light methodology and how each is
-                 detected; normative hierarchy; read-before-acting;
-                 flag-undecided-questions; verify external dependencies against their
-                 real source)
+DEPENDS ON:     rules/always/methodology.md (contract or tests as the reference;
+                 normative hierarchy; read-before-acting; flag-undecided-questions;
+                 verify external dependencies against their real source)
                  rules/always/testing.md (tests are never weakened to make an
                  integration pass)
                  rules/always/git.md (branch/review conventions; an agent may merge the
@@ -25,8 +24,8 @@ PERMISSIONS:
   tests            : W        # in the target repo only
   feature contract : R
   specs            : R
-  journal          : W        # full methodology: logs non-trivial integration decisions
-  review           : W        # light methodology: logs them in the review description
+  journal          : W        # when one exists: logs non-trivial integration decisions
+  review           : W
 ```
 
 ## Two modes
@@ -40,13 +39,11 @@ PERMISSIONS:
   code — units, null vs empty object, which lot owns a shared concern such as auth — but
   also in toolchain and minimum language version, dependencies, and lint configuration.
   A clean git merge proves none of this.
-- What the reconciliation must satisfy depends on the methodology:
-  - **Full**: the feature contract. Never edit the contract to justify a reconciliation
-    choice.
-  - **Light**: the tests of every side, passing together once combined; never weaken one
-    side's tests to make the other pass.
-- Where lots share an interface, verify both sides honor the same signature — frozen in
-  the contract in full methodology, as exercised by both sides' tests in light methodology.
+- The reconciliation must satisfy the feature contract when one exists, and every side's
+  tests, passing together once combined. Never edit the contract or weaken a test to
+  justify a reconciliation choice.
+- Where lots share an interface, verify both sides honor the same signature — the one the
+  contract freezes when one exists; a clean git merge does not prove semantic agreement.
 - Prefer an alignment commit on the development branch, before the merge, so the merge
   itself carries no code change.
 - When no intermediate state passes the hooks — the fix only compiles or lints once both

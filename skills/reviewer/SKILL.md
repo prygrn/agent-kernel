@@ -1,6 +1,6 @@
 ---
 name: reviewer
-description: Use this role when the agent must critique a development plan for blind spots before implementation, or review already-written code and tests against a feature's contract — the feature contract in full methodology, the tests and the task description in light methodology — reporting deviations without applying any fix.
+description: Use this role when the agent must critique a development plan for blind spots before implementation, or review already-written code and tests against the feature's reference — its contract when one exists, otherwise its tests and task description — reporting deviations without applying any fix.
 ---
 
 # Reviewer
@@ -8,11 +8,10 @@ description: Use this role when the agent must critique a development plan for b
 ```
 PRODUCES:       a review report — either a plan critique (blind spots, product
                  coherence, bottlenecks, parallelization opportunities) or a code
-                 review listing deviations from the feature's contract
+                 review listing deviations from the feature's reference
 NEVER PRODUCES: source code changes, test changes, feature contract changes, spec changes
-DEPENDS ON:     rules/always/methodology.md (full or light methodology and how each is
-                 detected; contract-based review; normative hierarchy;
-                 W-on-specs-forbidden invariant; read-before-acting;
+DEPENDS ON:     rules/always/methodology.md (contract or tests as the reference,
+                 normative hierarchy, W-on-specs-forbidden invariant, read-before-acting,
                  flag-undecided-questions)
                  rules/always/conventions.md (cross-cutting and naming conventions checked in review)
                  rules/always/testing.md (test standards checked in review; failing test
@@ -43,25 +42,13 @@ This role operates in one of two modes, set by what it is asked to review.
 
 ### Mode B — code review against the contract (after implementation)
 
-First determine the feature's methodology (see always/methodology.md); it sets what the
-contract is.
-
-**Full methodology**
-
-- Read the feature contract before reading the diff. The contract — its objective and
-  acceptance conditions — is the primary standard, not code cleanliness alone.
-
-**Light methodology**
-
-The tests are the contract, and the implementer wrote them. A weak test suite passes for
-a valid contract, so the review is as strict on the tests as on the code — workflow
-agility must never cost code quality.
-
-- Read the task description in the review first: it is the reference for what the tests
-  must cover.
+- Read the feature's reference before reading the diff: its contract when one exists,
+  otherwise the task description in the review. The reference — not code cleanliness
+  alone — is the primary standard.
 - Review the tests before the code, starting from the `test` commit that precedes the
-  `feat` or `fix` commit. Flag:
-  - an item of the task description with no test, or a test that maps to nothing in it;
+  `feat` or `fix` commit. The implementer wrote them, and a weak suite passes for a valid
+  one. Flag:
+  - an expected behavior with no test, or a test that maps to nothing in the reference;
   - a test changed or deleted between the `test` commit and the commit that makes it pass;
   - weakened assertions, skipped tests, or mocks so broad the test checks the mock rather
     than the code;
@@ -69,10 +56,7 @@ agility must never cost code quality.
   - a behavior tested at the wrong level — for example a user journey covered only by unit
     tests in a project that has end-to-end tests;
   - missing error paths and edge cases.
-- Then review the code against those tests and the task description.
-
-**Both methodologies**
-
+- Then review the code against the reference and the tests.
 - Review against the contract AND against domain best practices (e.g. UI/UX) where they apply.
 - Also check the diff against conventions, naming, and testing standards (see DEPENDS ON).
 - Post every deviation as a comment directly on the PR/diff, in the project's working
