@@ -78,60 +78,54 @@ agent-kernel/
                         #   normative hierarchy, "write-specs forbidden by default"
       conventions.md    # cross-cutting conventions (money in cents, null handling, auth…)
       testing.md
-      project/            # extension point — always empty here, see below
   skills/               # skills (Agent Skills format) — one loaded at a time, on demand
     reviewer/SKILL.md
     qa/SKILL.md
     implementer/SKILL.md
     integrator/SKILL.md
+    product-owner/SKILL.md
+  templates/            # product spec and feature contract, used when the human wants them
+  scripts/
+    compile-agents      # builds a consumer's AGENTS.md
+  hooks/                # git hooks a consumer points core.hooksPath at
+  tests/                # tests of the scripts and hooks (make test)
+  Makefile              # make quality (shellcheck) and make test
 ```
 
-### `rules/project/` — the one path this repo never populates
+### Project rules
 
-Gitignored on purpose. A consuming project's own rules (working mode with its
-specific user, product-specific constraints, anything true for that project
-alone) don't belong in a repo shared across every project — but the project
-may still want them physically reachable at `.agents/rules/project/`,
-alongside the kernel's own `always/`.
-
-Since a submodule's parent repo only ever tracks the submodule's commit SHA,
-never files inside it, anything placed directly under this gitignored path
-would be versioned nowhere and lost on the next fresh checkout. The fix: the
-consuming project keeps its real, tracked content in its own repo (e.g. a
-top-level `rules/project/`) and turns `.agents/rules/project` into a symlink
-pointing back to it. The kernel side stays clean and never sees project
-content; the project side keeps everything versioned in its own history.
+A consuming project keeps the rules true for it alone in its own repository, under
+`rules/project/`. The kernel never holds project content.
 
 ## Using it in a project
 
-Add the kernel as a submodule:
+Add the kernel as a submodule and wire it:
 
 ```bash
 git submodule add <kernel-repo-url> .agents
-git commit -m "add agent-kernel submodule"
+.agents/scripts/compile-agents            # writes AGENTS.md from .agents/rules/always/ + rules/project/
+git config core.hooksPath .agents/hooks   # once per clone: commit format, quality, tests, no push to main/master
 ```
+
+The hooks call two make targets the project provides: `make quality` (its linters, plus
+`.agents/scripts/compile-agents --check` so a stale `AGENTS.md` fails) and `make test`.
+Commit `AGENTS.md`; re-run the script whenever a rule changes.
 
 Pull the latest kernel improvements into a project:
 
 ```bash
 git submodule update --remote .agents
-git commit -m "update agent-kernel"
+.agents/scripts/compile-agents
+git commit -am "chore(agents): update agent-kernel"
 ```
 
 ## Tool agnosticity
 
-No tool name lives in this repo. Each consuming project adds one **slim** exposure file
-per tool, redirecting to the kernel — nothing important depends on any tool:
-
-```
-Read all rules under .agents/rules/always/ before acting. Load a role from .agents/skills/ only when assigned that role.
-```
-
-This exposure file covers two loading paths. It points the tool at rules/always/ (loaded in full, at all times — background invariants are outside the skill format) and at skills/ (from which the tool loads skills via the Agent Skills progressive disclosure — name+description at rest, full SKILL.md on activation). The file only declares where to look; it does not reimplement the loading itself.
-
-Put that line in `CLAUDE.md`, `.cursor/rules`, or whatever your agent reads. Leaving a
-tool means deleting a three-line file. Rules are kept as plain `.md` (no proprietary
-frontmatter); skills target the portable core of the Agent Skills format.
+No tool name lives in the kernel's rules or skills. `AGENTS.md` holds every rule inline
+and is read natively by most coding agents; for a tool that reads another file, make
+that file point to it (for example a `CLAUDE.md` containing `@AGENTS.md`). Leaving a
+tool means deleting that pointer. Rules are plain `.md`; skills target the portable core
+of the Agent Skills format and load on demand from `.agents/skills/`.
 
 ## Skills, rules, and MCP — where things go
 
