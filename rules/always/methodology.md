@@ -26,3 +26,4 @@ In full methodology, product decisions and implementation happen in separate ses
 In light methodology, the feature's tests are its contract.
 In light methodology, the task description in the review, validated by the human, is the reference for what the tests must cover.
 In light methodology, log every non-trivial decision in the review description.
+Before starting a new project or a new feature, load the orchestrator role.
