@@ -1,6 +1,6 @@
 Validate all input at system boundaries.
 Write the simplest code that satisfies the requirement.
-Do not optimize code before profiling proves it necessary.
+Optimize only code that profiling identifies as a bottleneck.
 Reuse existing code instead of duplicating it.
 Do not use boolean flag parameters to change a function's behavior.
 Include enough context in error messages to debug from them.
