@@ -1,5 +1,6 @@
 Write tests that express the intention and expected behavior of the code.
 A newly written test must fail before the code that satisfies it is written.
+Commit a new failing test in a test commit before the feat or fix commit that makes it pass.
 Write only the code necessary to make the failing test pass.
 After a test passes, you may propose a refactor.
 Justify any proposed refactor.
