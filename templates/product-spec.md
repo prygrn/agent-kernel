@@ -2,8 +2,8 @@
 
 The product spec states what the product is for and where it stops. It sits at the top of
 the sources of truth: every feature contract is a projection of it, and code that
-contradicts it is the bug. It lives at `docs/product-spec.md`; its existence puts the
-project in full methodology.
+contradicts it is the bug. It lives at `docs/product-spec.md`. It is optional: the
+human decides whether a project needs one.
 
 It is authoritative only once the human validates it. The Product Owner role drafts it
 from a dialogue with the human; it never invents the vision on the human's behalf.
@@ -31,4 +31,4 @@ a feature's worth.
 
 ## Open questions
 Undecided product questions, each flagged until the human decides it. A decided question
-moves into the sections above; its decision is logged in the journal.
+moves into the sections above.

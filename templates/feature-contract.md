@@ -6,9 +6,9 @@ the reviewer reviews against it, QA verifies against its acceptance criteria, th
 integrator reconciles toward it. It is authoritative only once the human validates it;
 until then it is a draft.
 
-It exists in full methodology only, at `docs/contracts/<feature>.md`; its existence puts
-the feature in full methodology. In light methodology, the feature's tests and the task
-description in the review play its role.
+It is optional: the human decides whether a feature needs one. It lives at
+`docs/contracts/<feature>.md`. Without it, the tests and the task description in the
+review are the reference.
 
 Keep it to half a page. It is a contract, not an architecture document.
 
