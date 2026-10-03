@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Enforces "push only to the development branch": refuses any push to main or master.
+set -euo pipefail
+
+readonly PROTECTED_REF_PATTERN='^refs/heads/(main|master)$'
+
+while read -r _ _ remote_ref _; do
+  if [[ "$remote_ref" =~ $PROTECTED_REF_PATTERN ]]; then
+    echo "pre-push: pushing to ${remote_ref#refs/heads/} is refused; push a development branch and open a review" >&2
+    exit 1
+  fi
+done
