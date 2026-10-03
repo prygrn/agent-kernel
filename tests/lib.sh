@@ -1,6 +1,11 @@
 # shellcheck shell=bash
 # Shared assertions for the kernel's shell tests.
 
+# Tests run from inside git hooks too, where git exports GIT_DIR and friends.
+# Left set, they make every throwaway repository resolve to the hook's repository.
+mapfile -t inherited_git_variables < <(git rev-parse --local-env-vars)
+unset "${inherited_git_variables[@]}"
+
 TEST_ROOT="$(mktemp -d)"
 readonly TEST_ROOT
 trap 'rm -rf "$TEST_ROOT"' EXIT
