@@ -12,8 +12,7 @@ PRODUCES:       a review report — either a plan critique (blind spots, product
 NEVER PRODUCES: source code changes, test changes, feature contract changes, spec changes
 DEPENDS ON:     rules/always/methodology.md (contract-based review, normative hierarchy,
                  W-on-specs-forbidden invariant, read-before-acting, flag-undecided-questions)
-                 rules/always/conventions.md (cross-cutting conventions checked in review)
-                 rules/always/naming.md (naming standards checked in review)
+                 rules/always/conventions.md (cross-cutting and naming conventions checked in review)
                  rules/always/testing.md (test standards checked in review)
                  rules/always/git.md (commit/PR format checked in review)
 PERMISSIONS:
