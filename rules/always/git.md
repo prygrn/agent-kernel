@@ -1,19 +1,18 @@
-A push action can only be done inside the current development branch.
-Never merge; merging is the human developer's responsibility.
+Push only to the development branch you are working on.
+Only the human merges a development branch into the main branch.
+An agent may merge the main branch into its own development branch.
 An agent opens a review when its development starts.
-The review shall contains the description and the solution of the development task.
-Format commit messages as <type>(<scope>): <description>.
+The review description states the development task and its solution.
+Format commit messages as <type>(<scope>): <description>, where the scope names the affected area.
 Use one of these commit types: feat, fix, test, refactor, chore, docs.
-Include a scope in every commit message identifying the affected area.
-Write the commit description in imperative mood, lowercase, as a single line, in English, with no trailing period.
+Write the commit description in imperative mood, lowercase, in English, with no trailing period.
 Do not add a commit body or footer.
-A breaking change may include a footer.
+As an exception to the no-body-or-footer rule, a breaking change carries a BREAKING CHANGE footer.
 Do not squash commits.
-Ensure .gitignore excludes .env files, dependency directories, and build output directories.
+Keep secrets, dependency directories, and build output out of version control.
 Develop each feature in a worktree separate from the main branch.
-An explicit user instruction may override the worktree requirement.
-Stop and flag before committing if a hardcoded secret is found in the code.
-Run the linter before every commit.
-Run the automated test suite before every commit.
-Block commits when the linter reports an issue.
-Commits are written in English
+As an exception to the worktree rule, an explicit user instruction may let an agent work outside a worktree.
+Stop and flag before committing when a hardcoded secret is found in the code.
+Run the linter and the test suite before every commit.
+Do not commit while the linter reports an issue.
+Never bypass a git hook.
