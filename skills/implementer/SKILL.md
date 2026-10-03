@@ -15,8 +15,7 @@ DEPENDS ON:     rules/always/methodology.md (feature contract as the reference;
                  flag-undecided-questions; verify external dependencies against their
                  real source)
                  rules/always/testing.md
-                 rules/always/naming.md (identifier and file naming)
-                 rules/always/conventions.md (cross-cutting conventions)
+                 rules/always/conventions.md (cross-cutting and naming conventions)
                  rules/always/git.md (commit format; agent opens the review, human merges)
 PERMISSIONS:
   source code      : W        # within the assigned scope only

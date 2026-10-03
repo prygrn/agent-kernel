@@ -77,7 +77,6 @@ agent-kernel/
       methodology.md    # feature contract, review vs contract, semantic integration,
                         #   normative hierarchy, "write-specs forbidden by default"
       conventions.md    # cross-cutting conventions (money in cents, null handling, auth…)
-      naming.md
       testing.md
       project/            # extension point — always empty here, see below
   skills/               # skills (Agent Skills format) — one loaded at a time, on demand
