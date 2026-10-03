@@ -11,13 +11,13 @@ Project-specific rules live in a separate `agent-modules` catalogue.
 
 Working with coding agents, one problem shows up on every project: **the further you get, the harder it is to keep agents coherent.** Context fills with history, stale decisions, and noise; quality that was sharp at feature 1 quietly erodes by feature 8. The agent didn't get worse — its context got polluted.
 
-This repo try to be the answer to that decay. It treats agent guidance as a system with a single source of truth, loaded selectively, versioned, and improved in one place so every project benefits at once. The design goal throughout is **low drift**: keep the intent stable, keep the context clean, and make each agent load only what its task needs.
+This repo tries to be the answer to that decay. It treats agent guidance as a system with a single source of truth, loaded selectively, versioned, and improved in one place so every project benefits at once. The design goal throughout is **low drift**: keep the intent stable, keep the context clean, and make each agent load only what its task needs.
 
 The principles it's built on:
 
 - **Context entropy is the real enemy.** Agents don't tire; their context degrades. Everything here fights that.
 - **Normative memory outranks narrative memory.** Specs and rules ("what must be") win over logs ("what happened"). When they conflict, the spec wins and the code is the bug.
-- **Least privilege for agents.** A role can't overflow into work it has no capability for. Isolation is wired, not politely requested.
+- **Least privilege for agents.** Each role declares what it may read and write, and never does another role's job. What a tool can enforce — git hooks, branch protection — is enforced, not requested.
 - **Sedimentation, not anticipation.** A rule enters only after it has proven itself on shipped code across projects — never speculatively.
 
 ---
@@ -49,10 +49,11 @@ A role declares its dependency on the `always/` rules it needs — it never dupl
 
 ## What a rule is
 
-- One sentence.
-- Unambiguous and verifiable.
-- No "but" / "except when" (that means it's two rules).
-- Written in English.
+- One sentence, unambiguous, verifiable, written in English.
+- No "but" / "except when": an exception is its own rule, naming the rule it restricts.
+- A conditional rule states its condition first.
+- Never restates what an agent already does unprompted.
+- Enforced by a tool when a tool can enforce it.
 - Invariant across all projects.
 
 See `rules/always/meta.md` for the full standard applied to every rule.
@@ -60,10 +61,17 @@ See `rules/always/meta.md` for the full standard applied to every rule.
 ## Role permissions (least privilege)
 
 Each role's `SKILL.md` declares its access to generic resources (source code, tests,
-feature contract, specs, journal, PR/diff) at three levels: **R** (read), **W** (write),
-**PROPOSE** (recommend without applying). A capability that is absent cannot overflow —
-isolation is wired, not requested. Write access to specs/contract is forbidden by default;
-the general form of that rule lives in `always/methodology.md`.
+feature contract, specs, journal, review) at three levels: **R** (read), **W** (write),
+**PROPOSE** (recommend without applying). Write access to specs and contracts is
+forbidden by default; the general form of that rule lives in `always/methodology.md`.
+
+Be clear about what holds these lines:
+- **Declared** — role permissions are instructions. The agent follows them; nothing
+  technically stops it from overstepping.
+- **Enforced** — the git hooks (commit format, quality and tests before every commit,
+  no push to `main`/`master`) and the hosting platform's branch protection (only an
+  approved review reaches `main`). Running agents under their own account (see below)
+  is what makes that approval mean something.
 
 ## Layout
 
@@ -74,9 +82,8 @@ agent-kernel/
     always/             # rules — loaded by all agents, always
       meta.md           # the standard every rule must meet
       git.md
-      methodology.md    # feature contract, review vs contract, semantic integration,
-                        #   normative hierarchy, "write-specs forbidden by default"
-      conventions.md    # cross-cutting conventions (money in cents, null handling, auth…)
+      methodology.md    # dependencies, linter, sources of truth, optional contract
+      conventions.md    # code and naming conventions
       testing.md
   skills/               # skills (Agent Skills format) — one loaded at a time, on demand
     reviewer/SKILL.md
@@ -113,7 +120,9 @@ To work on the kernel itself, add:
 - `git` 2.28 or later (tests)
 - `shellcheck` (`make quality`)
 
-## Using it in a project
+## Getting started
+
+### Install
 
 Add the kernel as a submodule and wire it:
 
@@ -134,6 +143,53 @@ git submodule update --remote .agents
 .agents/scripts/compile-agents
 git commit -am "chore(agents): update agent-kernel"
 ```
+
+Update when the kernel publishes a tag (see Versions), not on every commit.
+
+### How work flows
+
+One flow for every feature:
+
+1. **Task** — the human states what the change must do. The agent asks whether the
+   feature needs a feature contract (`templates/feature-contract.md`); the human decides.
+   A product can also have a product spec (`templates/product-spec.md`), drafted with
+   the Product Owner role in a session without code access.
+2. **Tests first** — the implementer commits failing tests in a `test` commit, then the
+   code that makes them pass in a `feat` or `fix` commit.
+3. **Review** — the reviewer reads the tests before the code, against the contract when
+   one exists, otherwise against the task description and the tests.
+4. **QA** — verifies each expected behavior in real conditions; a behavior no test covers
+   is a finding, even when everything is green.
+5. **Integration** — when work ran in parallel, the integrator reconciles it before merge.
+6. **Merge** — the agent opens the review; only the human merges.
+
+Behind it:
+- Sources of truth are ranked: spec above code. When they disagree, the code is the bug.
+- Undecided product or architecture questions are flagged, never settled by an agent.
+- Reviewer and QA report; they never fix.
+
+### Agents under their own account
+
+Give agents their own account on the code hosting platform — a machine account added as
+a collaborator with write access — and its own token, set only in the agents'
+environment, never in a committed file. Set the git author and committer to that account
+too. Reviews the agent opens can then be approved by the human (platforms forbid
+approving your own), and history shows who wrote what.
+
+### Personal preferences
+
+Preferences that follow a person rather than a project, such as the language to talk
+in, belong in neither the kernel nor the project. Keep them in one personal file (for
+example `~/.agents/personal.md`) and point each tool's user-level instructions at it;
+switching tools then means moving a pointer. Rules about what goes into the repository,
+such as the language of comments and documentation, are project rules, in
+`rules/project/`.
+
+### Versions
+
+A consumer pins the kernel through its submodule commit. A change meant to reach
+consumers gets an annotated tag (`vX.Y.Z`) whose message says what changes for them;
+consumers update deliberately, by tag.
 
 ## Tool agnosticity
 
