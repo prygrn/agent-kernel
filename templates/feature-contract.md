@@ -6,6 +6,10 @@ the reviewer reviews against it, QA verifies against its acceptance criteria, th
 integrator reconciles toward it. It is authoritative only once the human validates it;
 until then it is a draft.
 
+It exists in full methodology only, at `docs/contracts/<feature>.md`; its existence puts
+the feature in full methodology. In light methodology, the feature's tests and the task
+description in the review play its role.
+
 Keep it to half a page. It is a contract, not an architecture document.
 
 Required fields are marked (required). A contract missing a required field is incomplete
