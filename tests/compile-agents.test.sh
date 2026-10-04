@@ -68,6 +68,28 @@ expect success "compile-agents works without project rules" \
   compile_in "$(new_project)"
 expect failure "--check fails when AGENTS.md is missing" \
   compile_in "$(new_project)" --check
+# A project whose only rule is the given exception.
+new_project_with_rule() {
+  local project_dir
+  project_dir="$(new_project)"
+  mkdir -p "$project_dir/rules/project"
+  echo "$1" >"$project_dir/rules/project/exceptions.md"
+  echo "$project_dir"
+}
+
+expect success "compile-agents accepts an exception quoting a kernel rule word for word" \
+  compile_in "$(new_project_with_rule 'As an exception to the kernel rule "Do not abbreviate identifiers.", ctx is allowed for context.')"
+expect success "compile-agents accepts an exception quoting several kernel rules" \
+  compile_in "$(new_project_with_rule 'As an exception to the kernel rules "Reuse existing code instead of duplicating it." and "Do not abbreviate identifiers.", repeat this.')"
+expect success "compile-agents matches kernel rules written as list items" \
+  compile_in "$(new_project_with_rule 'As an exception to the kernel rule "A rule is one sentence.", this one has two.')"
+
+stale_project="$(new_project_with_rule 'As an exception to the kernel rule "Do not abbreviate names.", ctx is allowed for context.')"
+expect failure "compile-agents rejects an exception quoting a rule the kernel no longer has" \
+  compile_in "$stale_project"
+expect failure "--check rejects an exception quoting a rule the kernel no longer has" \
+  compile_in "$stale_project" --check
+
 expect failure "compile-agents refuses an absolute kernel path" \
   bash -c "cd '$project' && '$KERNEL_DIR/scripts/compile-agents'"
 
