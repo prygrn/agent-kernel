@@ -5,7 +5,7 @@
 set -euo pipefail
 
 readonly MESSAGE_FILE="$1"
-readonly HEADER_PATTERN='^(feat|fix|test|refactor|chore|docs)\([a-z0-9-]+\): [a-z0-9][^A-Z]*[^.]$'
+readonly HEADER_PATTERN='^(feat|fix|test|refactor|chore|docs)\([a-z0-9-]+\): [a-z0-9].*[^.]$'
 readonly BREAKING_FOOTER_PATTERN='^BREAKING CHANGE: '
 readonly SCISSORS_PATTERN='^# -+ >8 -+$'
 
@@ -14,7 +14,7 @@ header=$(head -n 1 <<<"$message_lines")
 extra_lines=$(tail -n +2 <<<"$message_lines")
 
 if ! [[ "$header" =~ $HEADER_PATTERN ]]; then
-  echo "commit-msg: invalid header, expected <type>(<scope>): <lowercase description without trailing period>" >&2
+  echo "commit-msg: invalid header, expected <type>(<scope>): <description starting lowercase, without trailing period>" >&2
   exit 1
 fi
 
