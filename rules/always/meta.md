@@ -6,7 +6,8 @@ These rules define what a valid rule is. They apply to themselves.
 - A rule is unambiguous.
 - A rule is verifiable.
 - A rule contains no "but" and no "except when".
-- An exception is a separate rule that names the rule it restricts.
+- An exception is a separate rule that quotes word for word the rule it restricts.
+- An exception to a kernel rule opens with: As an exception to the kernel rule "<quoted rule>".
 - A rule that applies only under a condition states that condition first.
 - A rule is written in English.
 - A rule earns its brevity from atomicity, not from dropped words.
