@@ -8,6 +8,7 @@ shopt -s nullglob
 readonly KERNEL_PATH="${0%/scripts/compile-agents}"
 readonly PROJECT_RULES_DIR="rules/project"
 readonly OUTPUT_FILE="AGENTS.md"
+readonly EXCEPTION_PREFIX_PATTERN='^As an exception to the kernel rules? '
 
 # The kernel path is written into AGENTS.md, so it must stay relative to the project root.
 if [[ "$KERNEL_PATH" == /* || ! -d "$KERNEL_PATH/rules/always" ]]; then
@@ -38,6 +39,32 @@ render() {
     append_section "Project — $(basename "$rule_file" .md)" "$rule_file"
   done
 }
+
+# Prints each kernel rule quoted by an exception, from the kernel and project rules alike.
+quoted_kernel_rules() {
+  cat "$KERNEL_PATH"/rules/always/*.md "$PROJECT_RULES_DIR"/*.md |
+    sed -E 's/^- //' |
+    grep -E "$EXCEPTION_PREFIX_PATTERN" |
+    sed -E 's/^As an exception to the kernel rules? //; s/", .*$/"/' |
+    grep -oE '"[^"]*"' |
+    sed -E 's/^"(.*)"$/\1/'
+}
+
+# An exception must quote a kernel rule that still exists word for word; otherwise a
+# kernel upgrade that rewords the rule would leave the exception pointing at nothing.
+check_quoted_kernel_rules() {
+  local kernel_rules quoted_rule is_valid=true
+  kernel_rules="$(sed -E 's/^- //' "$KERNEL_PATH"/rules/always/*.md)"
+  while IFS= read -r quoted_rule; do
+    if ! grep -qxF -- "$quoted_rule" <<<"$kernel_rules"; then
+      echo "compile-agents: no kernel rule reads \"$quoted_rule\"; update the exception that quotes it" >&2
+      is_valid=false
+    fi
+  done < <(quoted_kernel_rules)
+  [[ "$is_valid" == true ]]
+}
+
+check_quoted_kernel_rules || exit 1
 
 if [[ "${1:-}" == "--check" ]]; then
   if ! cmp -s <(render) "$OUTPUT_FILE"; then
