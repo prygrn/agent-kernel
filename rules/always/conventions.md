@@ -13,4 +13,4 @@ Update a comment in the same change as the code it describes.
 Write code, identifiers, test names, and log messages in English.
 Use consistent terminology for the same concept throughout the codebase.
 Do not abbreviate identifiers.
-As an exception to the no-abbreviation rule, loop counters may be single letters.
+As an exception to the kernel rule "Do not abbreviate identifiers.", loop counters may be single letters.

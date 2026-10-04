@@ -149,8 +149,10 @@ avoids ordering traps between the steps.
    checkout has none instead of silently skipping them. `core.hooksPath` then never
    changes when the kernel is upgraded.
 
-A project rule overrides a kernel rule only when it names it as an exception
-(`rules/always/meta.md`); `AGENTS.md` states it for the agent.
+A project rule overrides a kernel rule only when it names it as an exception, opening
+with `As an exception to the kernel rule "<rule quoted word for word>"` (`rules/always/meta.md`).
+`AGENTS.md` states it for the agent, and `compile-agents` fails when a quoted rule no
+longer exists, so a kernel upgrade that rewords a rule cannot leave an exception dangling.
 
 ### Upgrade
 
@@ -160,9 +162,14 @@ consumers.
 ```bash
 git -C .agents fetch --tags
 git -C .agents checkout vX.Y.Z
+# apply the consumer steps listed in the tag message
 .agents/scripts/compile-agents
-git commit -am "chore(agents): update agent-kernel to vX.Y.Z"
+git add .agents AGENTS.md          # plus any file those steps created, e.g. .githooks/
+git commit -m "chore(agents): update agent-kernel to vX.Y.Z"
 ```
+
+A project installed with v0.2.0 still points `core.hooksPath` at `.agents/hooks`:
+upgrading past it means installing the hook wrappers (Install, step 5).
 
 After the upgrade reaches them, other worktrees run `git submodule update`.
 
