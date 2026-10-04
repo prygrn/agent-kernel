@@ -29,9 +29,17 @@ has_single_top_heading() {
   [[ "$(grep -c '^# ' "$1/AGENTS.md")" -eq 1 ]]
 }
 
+has_blank_line_after_header_comment() {
+  [[ -z "$(sed -n 2p "$1/AGENTS.md")" ]]
+}
+
+has_no_consecutive_blank_lines() {
+  ! awk 'previous_blank && /^$/ { found = 1 } { previous_blank = /^$/ } END { exit !found }' "$1/AGENTS.md"
+}
+
 project="$(new_project)"
 mkdir -p "$project/rules/project"
-echo "Each feature lives in its own crate." >"$project/rules/project/architecture.md"
+printf '\nEach feature lives in its own crate.\n\n\n' >"$project/rules/project/architecture.md"
 
 expect success "compile-agents writes AGENTS.md" \
   compile_in "$project"
@@ -43,6 +51,12 @@ expect success "AGENTS.md points to the roles" \
   agents_file_contains "$project" ".agents/skills/"
 expect success "AGENTS.md has a single top-level heading" \
   has_single_top_heading "$project"
+expect success "AGENTS.md states that kernel rules win unless an exception names them" \
+  agents_file_contains "$project" "names it as an exception"
+expect success "AGENTS.md has a blank line after its header comment" \
+  has_blank_line_after_header_comment "$project"
+expect success "AGENTS.md has no consecutive blank lines" \
+  has_no_consecutive_blank_lines "$project"
 expect success "--check passes on an up-to-date AGENTS.md" \
   compile_in "$project" --check
 

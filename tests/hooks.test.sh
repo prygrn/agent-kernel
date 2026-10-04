@@ -49,6 +49,8 @@ expect failure "commit-msg rejects an unknown type" \
   commit_in "$repository" -m "feature(core): add receipt total"
 expect failure "commit-msg rejects an uppercase description" \
   commit_in "$repository" -m "feat(core): Add receipt total"
+expect success "commit-msg accepts uppercase acronyms after a lowercase start" \
+  commit_in "$repository" -m "feat(core): update AGENTS.md and the CI badge"
 expect failure "commit-msg rejects a trailing period" \
   commit_in "$repository" -m "feat(core): add receipt total."
 expect failure "commit-msg rejects a body" \

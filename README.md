@@ -91,7 +91,8 @@ agent-kernel/
     implementer/SKILL.md
     integrator/SKILL.md
     product-owner/SKILL.md
-  templates/            # product spec and feature contract, used when the human wants them
+  templates/            # product spec and feature contract, used when the human wants them;
+                        #   githook, the hook wrapper a consumer copies
   scripts/
     compile-agents      # builds a consumer's AGENTS.md
   hooks/                # git hooks a consumer points core.hooksPath at
@@ -113,7 +114,7 @@ To use the kernel in a project:
 - `git` 2.9 or later (`core.hooksPath`)
 - `make` — the hooks call `make quality` and `make test`, a stable entry point that
   works whatever the project's stack; each project wires its own tools behind them
-- `sed`, `grep`, `cmp` (POSIX)
+- `sed`, `grep`, `awk`, `cmp` (POSIX)
 
 To work on the kernel itself, add:
 - `bash` 4.4 or later and GNU `date` (tests)
@@ -124,27 +125,46 @@ To work on the kernel itself, add:
 
 ### Install
 
-Add the kernel as a submodule and wire it:
+Wire the kernel in a single commit: the hooks check the working tree, so one commit
+avoids ordering traps between the steps.
+
+1. Add the kernel as a submodule: `git submodule add <kernel-repo-url> .agents`.
+2. Copy the modules the project needs from `agent-modules` into `rules/project/` — every
+   language the project uses, not only the main one.
+3. Provide `make quality` (the project's linters, plus
+   `.agents/scripts/compile-agents --check` so a stale `AGENTS.md` fails) and `make test`.
+4. Run `.agents/scripts/compile-agents` to write `AGENTS.md`. Commit it, and exclude it
+   from formatters like any generated file: its output is stable under prettier's
+   defaults, but options such as `proseWrap: always` would still rewrite it.
+5. Install the hooks through tracked wrappers:
+
+   ```bash
+   mkdir -p .githooks
+   for hook in commit-msg pre-push; do cp .agents/templates/githook ".githooks/$hook"; done
+   git config core.hooksPath .githooks   # once per clone
+   ```
+
+   `core.hooksPath` is shared by every worktree of a clone. The wrappers make each
+   worktree run the hooks of its own `.agents` checkout, and block loudly when that
+   checkout has none instead of silently skipping them. `core.hooksPath` then never
+   changes when the kernel is upgraded.
+
+A project rule overrides a kernel rule only when it names it as an exception
+(`rules/always/meta.md`); `AGENTS.md` states it for the agent.
+
+### Upgrade
+
+Upgrade by tag (see Versions) and read the tag message first: it lists what changes for
+consumers.
 
 ```bash
-git submodule add <kernel-repo-url> .agents
-.agents/scripts/compile-agents            # writes AGENTS.md from .agents/rules/always/ + rules/project/
-git config core.hooksPath .agents/hooks   # once per clone: commit format, quality, tests, no push to main/master
-```
-
-The hooks call two make targets the project provides: `make quality` (its linters, plus
-`.agents/scripts/compile-agents --check` so a stale `AGENTS.md` fails) and `make test`.
-Commit `AGENTS.md`; re-run the script whenever a rule changes.
-
-Pull the latest kernel improvements into a project:
-
-```bash
-git submodule update --remote .agents
+git -C .agents fetch --tags
+git -C .agents checkout vX.Y.Z
 .agents/scripts/compile-agents
-git commit -am "chore(agents): update agent-kernel"
+git commit -am "chore(agents): update agent-kernel to vX.Y.Z"
 ```
 
-Update when the kernel publishes a tag (see Versions), not on every commit.
+After the upgrade reaches them, other worktrees run `git submodule update`.
 
 ### How work flows
 

@@ -5,7 +5,8 @@ An agent opens a review when its development starts.
 The review description states the development task and its solution.
 Format commit messages as <type>(<scope>): <description>, where the scope names the affected area.
 Use one of these commit types: feat, fix, test, refactor, chore, docs.
-Write the commit description in imperative mood, lowercase, in English, with no trailing period.
+Write the commit description in imperative mood, in English, with no trailing period.
+Start the commit description with a lowercase letter.
 Do not add a commit body or footer.
 As an exception to the no-body-or-footer rule, a breaking change carries a BREAKING CHANGE footer.
 Do not squash commits.
