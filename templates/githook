@@ -2,6 +2,7 @@
 # Copy into the project's tracked hooks directory, once per hook name (commit-msg, pre-push),
 # and point core.hooksPath at that directory. Each worktree then runs the kernel hook of its
 # own .agents checkout, and fails loudly instead of silently skipping when it has none.
+# The relative path holds because git runs hooks from the root of the working tree (githooks(5)).
 set -euo pipefail
 
 HOOK_NAME="$(basename "$0")"
